@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mrsutter/url_inspector.svg?branch=master)](https://travis-ci.org/mrsutter/url_inspector)
+
 # UrlInspector
 
 * * *
