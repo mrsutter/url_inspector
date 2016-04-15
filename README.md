@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/mrsutter/url_inspector.svg?branch=master)](https://travis-ci.org/mrsutter/url_inspector)
+[![Build Status](https://travis-ci.org/mrsutter/url_inspector.svg?branch=master)](https://travis-ci.org/mrsutter/url_inspector) [![Coverage Status](https://coveralls.io/repos/github/mrsutter/url_inspector/badge.svg?branch=feature%2Fcoveralls)](https://coveralls.io/github/mrsutter/url_inspector?branch=feature%2Fcoveralls)
 
 # UrlInspector
 
