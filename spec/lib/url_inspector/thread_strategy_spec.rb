@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ThreadStrategy do
+describe UrlInspector::ThreadStrategy do
   let(:options) do
     {
       urls: %w(http://www.perl.com/ http://www.thecomic.com/ http://www.lunartik.com/),
@@ -11,7 +11,8 @@ describe ThreadStrategy do
 
   describe '#perform' do
     before do
-      allow_any_instance_of(ThreadStrategy::Inspector).to receive(:inspect)
+      inspector = UrlInspector::ThreadStrategy::Inspector
+      allow_any_instance_of(inspector).to receive(:inspect)
     end
 
     it 'creates thread for every url' do

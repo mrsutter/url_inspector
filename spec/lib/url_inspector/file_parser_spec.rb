@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FileParser do
+describe UrlInspector::FileParser do
   describe '#parse' do
     context 'when file contains non url string' do
       let(:file) { 'spec/fixtures/url_list_with_wrong_urls.txt' }

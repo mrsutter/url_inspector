@@ -6,4 +6,5 @@ gem 'concurrent-ruby', require: 'concurrent'
 gem 'rspec', '~> 3.4.0'
 gem 'webmock', require: false
 gem 'timecop'
+gem 'simplecov', require: false
 gem 'coveralls', require: false
