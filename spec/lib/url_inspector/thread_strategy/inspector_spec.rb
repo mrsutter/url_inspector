@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ThreadStrategy::Inspector do
+describe UrlInspector::ThreadStrategy::Inspector do
   let(:options) do
     {
       url: 'http://www.google.com/',
@@ -9,10 +9,9 @@ describe ThreadStrategy::Inspector do
     }
   end
 
-  subject { ThreadStrategy::Inspector.new(options) }
+  subject { described_class.new(options) }
 
   before do
-    UrlInspectorLogger.new('/dev/null')
     allow(subject).to receive(:loop).and_yield
   end
 

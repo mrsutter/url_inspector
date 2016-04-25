@@ -16,6 +16,6 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
-    UrlInspectorLogger.new('/dev/null')
+    UrlInspector::Log.logger = Logger.new('/dev/null')
   end
 end

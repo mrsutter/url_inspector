@@ -1,47 +1,70 @@
 #!/usr/bin/env ruby
 
 require './boot'
-Dir[File.dirname(__FILE__) + '/config/**/*.rb'].each { |file| require file }
+require_relative 'config/initializers/logger_initializer'
 
-file_name = ARGV[0]
-urls = FileParser.new(file_name).parse
-
-raise ArgumentError, 'Please, specify normal interval' unless ARGV[1]
-raise ArgumentError, 'Please, specify emergency interval' unless ARGV[2]
-
-normal_interval = ARGV[1].to_i
-emergency_interval = ARGV[2].to_i
-
-unless normal_interval > 0
-  raise ArgumentError, 'Normal Interval must be a positive integer'
-end
-unless emergency_interval > 0
-  raise ArgumentError, 'Emergency Interval must be a positive integer'
+def urls_from_file(file)
+  parser = UrlInspector::FileParser.new(file)
+  parser.parse
 end
 
-strategy_name = ARGV[3]
-possible_strategies = %w(thread thread_pool)
-raise ArgumentError, 'Please, specify inspecting strategy' unless strategy_name
-unless possible_strategies.include?(strategy_name)
-  raise ArgumentError, "Strategy #{strategy_name} doesn't exist"
+def validate_intervals(normal_interval, emergency_interval)
+  unless normal_interval > 0
+    raise ArgumentError, 'Normal Interval must be a positive integer'
+  end
+  unless emergency_interval > 0
+    raise ArgumentError, 'Emergency Interval must be a positive integer'
+  end
 end
 
-strategy_real_name = "#{strategy_name}_strategy"
-strategy_klass_name = strategy_real_name.split('_').map(&:capitalize).join
-klass = Object.const_get(strategy_klass_name)
+def strategy_class(strategy_name)
+  possible_strategies = %w(thread thread_pool)
+  unless possible_strategies.include?(strategy_name)
+    raise ArgumentError, "Strategy #{strategy_name} doesn't exist"
+  end
 
-params = {
-  urls: urls,
-  normal_interval: normal_interval,
-  emergency_interval: emergency_interval
-}
+  strategy_real_name = "#{strategy_name}_strategy"
+  strategy_klass_name = strategy_real_name.split('_').map(&:capitalize).join
+  strategy_klass_full_name = "UrlInspector::#{strategy_klass_name}"
+  Object.const_get(strategy_klass_full_name)
+end
 
-strategy = klass.new(params)
-
-begin
-  puts 'Script is working'
+def perform_strategy(strategy)
+  puts 'Script is running'
   strategy.perform
 rescue Interrupt
   puts 'Shutting down, please wait.....'
-  strategy.shutdown
+  strategy.shutdown if strategy
 end
+
+def process(options)
+  urls = urls_from_file(options[:file])
+
+  normal_interval = options[:normal_interval].to_i
+  emergency_interval = options[:emergency_interval].to_i
+
+  validate_intervals(normal_interval, emergency_interval)
+
+  params = {
+    urls: urls,
+    normal_interval: normal_interval,
+    emergency_interval: emergency_interval
+  }
+
+  strategy_name = options[:strategy_name]
+  strategy = strategy_class(strategy_name).new(params)
+  perform_strategy(strategy)
+end
+
+options = {
+  file: ARGV[0],
+  normal_interval: ARGV[1],
+  emergency_interval: ARGV[2],
+  strategy_name: ARGV[3]
+}
+
+options.each do |option_name, value|
+  raise ArgumentError, "Please, specify #{option_name}" unless value
+end
+
+process(options)

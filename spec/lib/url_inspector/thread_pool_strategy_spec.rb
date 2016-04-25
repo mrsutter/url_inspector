@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ThreadPoolStrategy do
+describe UrlInspector::ThreadPoolStrategy do
   let(:urls) do
     %w(http://www.perl.com/ http://www.thecomic.com/ http://www.lunartik.com/)
   end
@@ -16,7 +16,7 @@ describe ThreadPoolStrategy do
     Timecop.freeze
   end
 
-  subject { ThreadPoolStrategy.new(options) }
+  subject { described_class.new(options) }
 
   describe '#perform' do
     before do

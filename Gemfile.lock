@@ -57,3 +57,6 @@ DEPENDENCIES
   rspec (~> 3.4.0)
   timecop
   webmock
+
+BUNDLED WITH
+   1.11.2
