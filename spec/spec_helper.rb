@@ -1,7 +1,10 @@
 require 'webmock/rspec'
 WebMock.disable_net_connect!(allow_localhost: true)
 
+require 'simplecov'
 require 'coveralls'
+
+SimpleCov.formatter = Coveralls::SimpleCov::Formatter
 Coveralls.wear!
 
 require_relative '../boot'
